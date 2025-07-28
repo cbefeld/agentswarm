@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signal Studios Agentic Swarm</title>
+    <title>Signal Studio Agent Swarm</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -11,16 +11,18 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
-                <h1>Agentic Swarm</h1>
+                <h1>Signal Studios Agent Swarm</h1>
             </div>
             <div class="nav-controls">
                 <select id="dataset-selector" class="dataset-selector">
                     <option value="agents-analysts-products">Agents, Analysts, Products</option>
                     <option value="agents-analysts-products-xxl">Agents, Analysts, Products XXL</option>
+                    <option value="collaborative-session">Collaborative Session</option>
                 </select>
                 <button id="addNode">Add Node</button>
                 <button id="addEdge">Add Edge</button>
                 <button id="reset">Reset Graph</button>
+                <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle Dark Mode">🌙</button>
             </div>
         </div>
     </nav>
@@ -36,7 +38,7 @@
                     <input type="checkbox" id="toggle-agents" checked>
                     <span class="slider"></span>
                 </label>
-                <span class="legend-label">Agents</span>
+                <span class="legend-label" id="legend-agents">Agents</span>
                 <div class="legend-color" style="background-color: #1f77b4;"></div>
             </div>
             <div class="legend-item">
@@ -44,7 +46,7 @@
                     <input type="checkbox" id="toggle-analysts" checked>
                     <span class="slider"></span>
                 </label>
-                <span class="legend-label">Analysts</span>
+                <span class="legend-label" id="legend-analysts">Analysts</span>
                 <div class="legend-color" style="background-color: #ff7f0e;"></div>
             </div>
             <div class="legend-item">
@@ -52,7 +54,7 @@
                     <input type="checkbox" id="toggle-products" checked>
                     <span class="slider"></span>
                 </label>
-                <span class="legend-label">Products</span>
+                <span class="legend-label" id="legend-products">Products</span>
                 <div class="legend-color" style="background-color: #2ca02c;"></div>
             </div>
         </div>
@@ -92,6 +94,16 @@
             <button id="zoomOut" class="zoom-btn" title="Zoom Out">−</button>
             <button id="zoomReset" class="zoom-btn" title="Reset Zoom">⌂</button>
             <div class="zoom-level" id="zoomLevel">100%</div>
+        </div>
+        
+        <div class="density-controls">
+            <div class="density-label">Density</div>
+            <input type="range" id="density-slider" min="0.1" max="3" value="1" step="0.1" class="density-slider">
+            <div class="density-value" id="densityValue">1.0x</div>
+            
+            <div class="density-label">Group Spacing</div>
+            <input type="range" id="group-spacing-slider" min="0.5" max="5" value="1" step="0.1" class="density-slider">
+            <div class="density-value" id="groupSpacingValue">1.0x</div>
         </div>
         
         <div id="graph-container"></div>

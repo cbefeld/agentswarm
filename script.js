@@ -15,6 +15,9 @@ let isTimelineMode = false;
 let timelineInterval = null;
 let timelineSpeed = 1; // Default speed multiplier
 
+// Dark mode variables
+let isDarkMode = false;
+
 // Box selection variables
 let selectedNodes = [];
 let isBoxSelecting = false;
@@ -24,7 +27,8 @@ let selectionStart = null;
 // Dataset library
 const datasets = {
     'agents-analysts-products': generateAgentsAnalystsProducts,
-    'agents-analysts-products-xxl': generateAgentsAnalystsProductsXXL
+    'agents-analysts-products-xxl': generateAgentsAnalystsProductsXXL,
+    'collaborative-session': generateCollaborativeSession
 };
 
 // Generate 105 nodes with 3 distinct areas
@@ -123,6 +127,121 @@ function generateAgentsAnalystsProducts() {
             });
         }
     }
+    
+    return { nodes, links };
+}
+
+// Generate collaborative development session dataset
+function generateCollaborativeSession() {
+    const nodes = [];
+    const links = [];
+    
+    // Human Commands (Group 1)
+    const humanCommands = [
+        { id: 1, name: "Make timeline wider", timestamp: 0, group: 1 },
+        { id: 2, name: "Add speed control", timestamp: 5, group: 1 },
+        { id: 3, name: "Add 10x speed option", timestamp: 10, group: 1 },
+        { id: 4, name: "Move speed controls left", timestamp: 12, group: 1 },
+        { id: 5, name: "Change page title", timestamp: 15, group: 1 },
+        { id: 6, name: "Create timeline branch", timestamp: 18, group: 1 },
+        { id: 7, name: "Create dark-mode branch", timestamp: 25, group: 1 },
+        { id: 8, name: "Implement dark mode", timestamp: 30, group: 1 },
+        { id: 9, name: "Make greys darker", timestamp: 45, group: 1 },
+        { id: 10, name: "Create experimental-data branch", timestamp: 50, group: 1 },
+        { id: 11, name: "Create collaborative dataset", timestamp: 55, group: 1 }
+    ];
+    
+    // AI Responses (Group 2)
+    const aiResponses = [
+        { id: 12, name: "Timeline width increased", timestamp: 2, group: 2 },
+        { id: 13, name: "Speed control added", timestamp: 7, group: 2 },
+        { id: 14, name: "10x speed implemented", timestamp: 11, group: 2 },
+        { id: 15, name: "Speed controls repositioned", timestamp: 13, group: 2 },
+        { id: 16, name: "Title updated", timestamp: 16, group: 2 },
+        { id: 17, name: "Timeline branch created", timestamp: 20, group: 2 },
+        { id: 18, name: "Dark-mode branch ready", timestamp: 27, group: 2 },
+        { id: 19, name: "Dark mode implemented", timestamp: 35, group: 2 },
+        { id: 20, name: "Darker greys applied", timestamp: 47, group: 2 },
+        { id: 21, name: "Experimental branch ready", timestamp: 52, group: 2 },
+        { id: 22, name: "Creating collaborative dataset", timestamp: 57, group: 2 }
+    ];
+    
+    // Code Changes (Group 3)
+    const codeChanges = [
+        { id: 23, name: "CSS: min-width 400px", timestamp: 3, group: 3 },
+        { id: 24, name: "HTML: Speed selector", timestamp: 8, group: 3 },
+        { id: 25, name: "JS: Speed functionality", timestamp: 9, group: 3 },
+        { id: 26, name: "CSS: Speed positioning", timestamp: 14, group: 3 },
+        { id: 27, name: "HTML: Title change", timestamp: 17, group: 3 },
+        { id: 28, name: "Git: Timeline branch", timestamp: 22, group: 3 },
+        { id: 29, name: "Git: Dark-mode branch", timestamp: 28, group: 3 },
+        { id: 30, name: "CSS: Dark theme vars", timestamp: 36, group: 3 },
+        { id: 31, name: "JS: Dark mode toggle", timestamp: 40, group: 3 },
+        { id: 32, name: "CSS: Darker colors", timestamp: 48, group: 3 },
+        { id: 33, name: "Git: Experimental branch", timestamp: 53, group: 3 },
+        { id: 34, name: "JS: Dataset function", timestamp: 58, group: 3 }
+    ];
+    
+    // Add all nodes
+    nodes.push(...humanCommands, ...aiResponses, ...codeChanges);
+    
+    // Create connections between related items
+    const connections = [
+        // Timeline width feature
+        { source: 1, target: 12, timestamp: 2 }, // Command -> Response
+        { source: 12, target: 23, timestamp: 3 }, // Response -> Code Change
+        
+        // Speed control feature
+        { source: 2, target: 13, timestamp: 7 }, // Command -> Response
+        { source: 13, target: 24, timestamp: 8 }, // Response -> HTML
+        { source: 13, target: 25, timestamp: 9 }, // Response -> JS
+        
+        // Speed positioning
+        { source: 4, target: 15, timestamp: 13 }, // Command -> Response
+        { source: 15, target: 26, timestamp: 14 }, // Response -> Code
+        
+        // Title change
+        { source: 5, target: 16, timestamp: 16 }, // Command -> Response
+        { source: 16, target: 27, timestamp: 17 }, // Response -> Code
+        
+        // Branch creation
+        { source: 6, target: 17, timestamp: 20 }, // Command -> Response
+        { source: 17, target: 28, timestamp: 22 }, // Response -> Git
+        
+        // Dark mode implementation
+        { source: 8, target: 19, timestamp: 35 }, // Command -> Response
+        { source: 19, target: 30, timestamp: 36 }, // Response -> CSS
+        { source: 19, target: 31, timestamp: 40 }, // Response -> JS
+        
+        // Darker colors
+        { source: 9, target: 20, timestamp: 47 }, // Command -> Response
+        { source: 20, target: 32, timestamp: 48 }, // Response -> Code
+        
+        // Experimental branch
+        { source: 10, target: 21, timestamp: 52 }, // Command -> Response
+        { source: 21, target: 33, timestamp: 53 }, // Response -> Git
+        
+        // Current dataset creation
+        { source: 11, target: 22, timestamp: 57 }, // Command -> Response
+        { source: 22, target: 34, timestamp: 58 }, // Response -> Code
+        
+        // Cross-feature connections
+        { source: 3, target: 14, timestamp: 11 }, // 10x speed -> Response
+        { source: 7, target: 18, timestamp: 27 }, // Dark branch -> Response
+        
+        // Feature evolution connections
+        { source: 23, target: 24, timestamp: 8 }, // Timeline -> Speed
+        { source: 24, target: 30, timestamp: 36 }, // Speed -> Dark mode
+        { source: 30, target: 32, timestamp: 48 }, // Dark mode -> Darker
+    ];
+    
+    // Add all links
+    links.push(...connections.map(link => ({
+        source: link.source,
+        target: link.target,
+        value: 1,
+        timestamp: link.timestamp
+    })));
     
     return { nodes, links };
 }
@@ -262,6 +381,9 @@ function switchDataset(datasetName) {
         // Reset legend toggles to show all node types
         resetLegendToggles();
         
+        // Update legend labels for the new dataset
+        updateLegendLabels(datasetName);
+        
         // Update AI insights for the new dataset
         updateInfo();
         
@@ -345,11 +467,18 @@ selectionCloseBtn.append('text')
 const nodeCount = graphData.nodes.length;
 const isLargeDataset = nodeCount > 200;
 
+// Density control variables
+let densityMultiplier = 1.0;
+let groupSpacingMultiplier = 1.0;
+let baseLinkDistance = isLargeDataset ? 30 : 40;
+let baseChargeStrength = isLargeDataset ? -60 : -80;
+let baseCollisionRadius = isLargeDataset ? 12 : 15;
+
 const simulation = d3.forceSimulation(graphData.nodes)
-    .force('link', d3.forceLink(graphData.links).id(d => d.id).distance(isLargeDataset ? 30 : 40))
-    .force('charge', d3.forceManyBody().strength(isLargeDataset ? -60 : -80))
+    .force('link', d3.forceLink(graphData.links).id(d => d.id).distance(baseLinkDistance))
+    .force('charge', d3.forceManyBody().strength(baseChargeStrength))
     .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collision', d3.forceCollide().radius(isLargeDataset ? 12 : 15));
+    .force('collision', d3.forceCollide().radius(baseCollisionRadius));
 
 // Create links
 let link = g.append('g')
@@ -1186,12 +1315,34 @@ node.on('click', function(event, d) {
     console.log('Selected node:', d);
 });
     
+    // Update base parameters for new dataset
+    const newNodeCount = graphData.nodes.length;
+    const newIsLargeDataset = newNodeCount > 200;
+    baseLinkDistance = newIsLargeDataset ? 30 : 40;
+    baseChargeStrength = newIsLargeDataset ? -60 : -80;
+    baseCollisionRadius = newIsLargeDataset ? 12 : 15;
+    
     // Recreate simulation for force layout with adaptive parameters
     simulation.nodes(graphData.nodes);
     simulation.force('link').links(graphData.links);
-    simulation.force('link').distance(isLargeDataset ? 30 : 40);
-    simulation.force('charge').strength(isLargeDataset ? -60 : -80);
-    simulation.force('collision').radius(isLargeDataset ? 12 : 15);
+    
+    // Calculate group-based charge strength
+    const groupChargeStrength = baseChargeStrength * densityMultiplier * groupSpacingMultiplier;
+    
+    // Calculate centering strength based on group spacing
+    const centeringStrength = groupSpacingMultiplier < 1 ? (1 - groupSpacingMultiplier) * 0.3 : 0;
+    
+    simulation.force('link').distance(baseLinkDistance * densityMultiplier);
+    simulation.force('charge').strength(groupChargeStrength);
+    simulation.force('collision').radius(baseCollisionRadius * densityMultiplier);
+    
+    // Add or update centering force
+    if (centeringStrength > 0) {
+        simulation.force('center', d3.forceCenter(width / 2, height / 2).strength(centeringStrength));
+    } else {
+        simulation.force('center', d3.forceCenter(width / 2, height / 2));
+    }
+    
     simulation.alpha(1).restart();
     
     // Update tick function
@@ -1247,6 +1398,9 @@ node.on('click', function(event, d) {
 
 // Initialize info panel
 updateInfo();
+
+// Initialize legend labels
+updateLegendLabels('agents-analysts-products');
 
 
 
@@ -1374,6 +1528,23 @@ function resetLegendToggles() {
     if (link) link.style('display', 'block');
 }
 
+// Function to update legend labels based on dataset
+function updateLegendLabels(datasetName) {
+    const legendAgents = document.getElementById('legend-agents');
+    const legendAnalysts = document.getElementById('legend-analysts');
+    const legendProducts = document.getElementById('legend-products');
+    
+    if (datasetName === 'collaborative-session') {
+        legendAgents.textContent = 'Human Commands';
+        legendAnalysts.textContent = 'AI Responses';
+        legendProducts.textContent = 'Code Changes';
+    } else {
+        legendAgents.textContent = 'Agents';
+        legendAnalysts.textContent = 'Analysts';
+        legendProducts.textContent = 'Products';
+    }
+}
+
 // Function to clear chat messages
 function clearChatMessages() {
     const chatMessages = document.getElementById('chat-messages');
@@ -1405,6 +1576,99 @@ function toggleNodeType(groupId, visible) {
         return sourceVisible && targetVisible ? 'block' : 'none';
     });
 }
+
+// Dark mode functionality
+
+function toggleDarkMode() {
+    isDarkMode = !isDarkMode;
+    const toggleBtn = document.getElementById('darkModeToggle');
+    
+    if (isDarkMode) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        toggleBtn.textContent = '☀️';
+        toggleBtn.title = 'Switch to Light Mode';
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙';
+        toggleBtn.title = 'Switch to Dark Mode';
+    }
+    
+    // Save preference to localStorage
+    localStorage.setItem('darkMode', isDarkMode);
+}
+
+function initializeDarkMode() {
+    // Check for saved preference or default to light mode
+    const savedDarkMode = localStorage.getItem('darkMode');
+    isDarkMode = savedDarkMode === 'true';
+    
+    if (isDarkMode) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('darkModeToggle').textContent = '☀️';
+        document.getElementById('darkModeToggle').title = 'Switch to Light Mode';
+    }
+}
+
+// Initialize dark mode on page load
+document.addEventListener('DOMContentLoaded', initializeDarkMode);
+
+// Dark mode toggle event listener
+document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+
+// Density control functionality
+function updateDensity(value) {
+    densityMultiplier = parseFloat(value);
+    
+    // Update the display
+    document.getElementById('densityValue').textContent = `${densityMultiplier.toFixed(1)}x`;
+    
+    // Update simulation forces
+    updateSimulationForces();
+}
+
+function updateGroupSpacing(value) {
+    groupSpacingMultiplier = parseFloat(value);
+    
+    // Update the display
+    document.getElementById('groupSpacingValue').textContent = `${groupSpacingMultiplier.toFixed(1)}x`;
+    
+    // Update simulation forces
+    updateSimulationForces();
+}
+
+function updateSimulationForces() {
+    // Calculate group-based charge strength
+    const groupChargeStrength = baseChargeStrength * densityMultiplier * groupSpacingMultiplier;
+    
+    // Calculate centering strength based on group spacing
+    // Lower group spacing = stronger centering force to pull groups together
+    const centeringStrength = groupSpacingMultiplier < 1 ? (1 - groupSpacingMultiplier) * 0.3 : 0;
+    
+    // Update simulation forces
+    simulation.force('link').distance(baseLinkDistance * densityMultiplier);
+    simulation.force('charge').strength(groupChargeStrength);
+    simulation.force('collision').radius(baseCollisionRadius * densityMultiplier);
+    
+    // Add or update centering force
+    if (centeringStrength > 0) {
+        simulation.force('center', d3.forceCenter(width / 2, height / 2).strength(centeringStrength));
+    } else {
+        simulation.force('center', d3.forceCenter(width / 2, height / 2));
+    }
+    
+    // Restart simulation with new parameters
+    simulation.alpha(0.3).restart();
+}
+
+// Density slider event listener
+document.getElementById('density-slider').addEventListener('input', (event) => {
+    updateDensity(event.target.value);
+});
+
+// Group spacing slider event listener
+document.getElementById('group-spacing-slider').addEventListener('input', (event) => {
+    updateGroupSpacing(event.target.value);
+});
 
 
 
