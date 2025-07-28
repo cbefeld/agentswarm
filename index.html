@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Graph Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>Agentic Swarm</h1>
+            </div>
+            <div class="nav-controls">
+                <select id="dataset-selector" class="dataset-selector">
+                    <option value="agents-analysts-products">Agents, Analysts, Products</option>
+                    <option value="agents-analysts-products-xxl">Agents, Analysts, Products XXL</option>
+                </select>
+                <button id="addNode">Add Node</button>
+                <button id="addEdge">Add Edge</button>
+                <button id="reset">Reset Graph</button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header>
+        </header>
+        
+        <div class="legend">
+            <h4>Node Types</h4>
+            <div class="legend-item">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-agents" checked>
+                    <span class="slider"></span>
+                </label>
+                <span class="legend-label">Agents</span>
+                <div class="legend-color" style="background-color: #1f77b4;"></div>
+            </div>
+            <div class="legend-item">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-analysts" checked>
+                    <span class="slider"></span>
+                </label>
+                <span class="legend-label">Analysts</span>
+                <div class="legend-color" style="background-color: #ff7f0e;"></div>
+            </div>
+            <div class="legend-item">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-products" checked>
+                    <span class="slider"></span>
+                </label>
+                <span class="legend-label">Products</span>
+                <div class="legend-color" style="background-color: #2ca02c;"></div>
+            </div>
+        </div>
+        
+        <div class="zoom-controls">
+            <button id="zoomIn" class="zoom-btn" title="Zoom In">+</button>
+            <button id="zoomOut" class="zoom-btn" title="Zoom Out">−</button>
+            <button id="zoomReset" class="zoom-btn" title="Reset Zoom">⌂</button>
+            <div class="zoom-level" id="zoomLevel">100%</div>
+        </div>
+        
+        <div id="graph-container"></div>
+        
+        <div class="info-panel">
+            <h3>Graph Info</h3>
+            <div id="node-count">Nodes: 0</div>
+            <div id="edge-count">Edges: 0</div>
+            <div class="ai-insights-section">
+                <h4>🤖 AI Insights</h4>
+                <div id="ai-insights" class="ai-insights">
+                    <div class="loading-insight">Analyzing graph...</div>
+                </div>
+                <div class="ai-chat-section">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="chat-message ai-message">
+                            <div class="message-content">
+                                Hi! I'm your graph analysis assistant. Ask me anything about your data!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Ask about your graph..." class="chat-input">
+                        <button id="send-chat" class="send-button">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="node-info-box" class="node-info-box">
+            <div class="info-header">
+                <h3>Node Details</h3>
+                <button id="close-info" class="close-btn">&times;</button>
+            </div>
+            <div class="info-content">
+                <div class="placeholder-message">
+                    Select a node to see details
+                </div>
+                <div class="info-details hidden">
+                    <div class="info-row">
+                        <span class="label">ID:</span>
+                        <span id="node-id">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Name:</span>
+                        <span id="node-name">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Group:</span>
+                        <span id="node-group">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Connections:</span>
+                        <span id="node-connections">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Position:</span>
+                        <span id="node-position">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
