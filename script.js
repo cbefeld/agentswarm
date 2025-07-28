@@ -4,6 +4,17 @@ let graphData = {
     links: []
 };
 
+// Timeline variables
+let timelineData = {
+    nodes: [],
+    links: []
+};
+let currentTime = 0;
+let maxTime = 0;
+let isTimelineMode = false;
+let timelineInterval = null;
+let timelineSpeed = 1; // Default speed multiplier
+
 // Box selection variables
 let selectedNodes = [];
 let isBoxSelecting = false;
@@ -42,7 +53,8 @@ function generateAgentsAnalystsProducts() {
             group: group,
             level: Math.floor((i - 1) / 35) + 1, // 3 levels with ~35 nodes each
             x: Math.random() * 1200,
-            y: Math.random() * 800
+            y: Math.random() * 800,
+            timestamp: Math.floor(Math.random() * 100) // Add a timestamp
         });
     }
     
@@ -73,7 +85,8 @@ function generateAgentsAnalystsProducts() {
                         source: source,
                         target: target,
                         value: Math.floor(Math.random() * 3) + 1,
-                        type: 'internal'
+                        type: 'internal',
+                        timestamp: Math.floor(Math.random() * 100) // Add a timestamp
                     });
                 }
             }
@@ -105,7 +118,8 @@ function generateAgentsAnalystsProducts() {
                 source: source,
                 target: target,
                 value: Math.floor(Math.random() * 3) + 1,
-                type: 'cross' // Mark as cross connection
+                type: 'cross', // Mark as cross connection
+                timestamp: Math.floor(Math.random() * 100) // Add a timestamp
             });
         }
     }
@@ -139,7 +153,8 @@ function generateAgentsAnalystsProductsXXL() {
             group: group,
             level: Math.floor((i - 1) / 105) + 1, // 3 levels with ~105 nodes each
             x: Math.random() * 1200,
-            y: Math.random() * 800
+            y: Math.random() * 800,
+            timestamp: Math.floor(Math.random() * 100) // Add a timestamp
         });
     }
     
@@ -170,7 +185,8 @@ function generateAgentsAnalystsProductsXXL() {
                         source: source,
                         target: target,
                         value: Math.floor(Math.random() * 3) + 1,
-                        type: 'internal'
+                        type: 'internal',
+                        timestamp: Math.floor(Math.random() * 100) // Add a timestamp
                     });
                 }
             }
@@ -202,7 +218,8 @@ function generateAgentsAnalystsProductsXXL() {
                 source: source,
                 target: target,
                 value: Math.floor(Math.random() * 3) + 1,
-                type: 'cross' // Mark as cross connection
+                type: 'cross', // Mark as cross connection
+                timestamp: Math.floor(Math.random() * 100) // Add a timestamp
             });
         }
     }
@@ -216,6 +233,30 @@ function switchDataset(datasetName) {
         console.log(`Switching to dataset: ${datasetName}`);
         graphData = datasets[datasetName]();
         console.log(`New graph data: ${graphData.nodes.length} nodes, ${graphData.links.length} links`);
+        
+        // Reset timeline mode if active
+        if (isTimelineMode) {
+            isTimelineMode = false;
+            const toggleBtn = document.getElementById('timeline-toggle');
+            const slider = document.getElementById('timeline-slider');
+            const playBtn = document.getElementById('timeline-play');
+            const pauseBtn = document.getElementById('timeline-pause');
+            const resetBtn = document.getElementById('timeline-reset');
+            const speedSelector = document.getElementById('timeline-speed');
+            
+            toggleBtn.textContent = 'Enable';
+            slider.disabled = true;
+            playBtn.disabled = true;
+            pauseBtn.disabled = true;
+            resetBtn.disabled = true;
+            speedSelector.disabled = true;
+            
+            if (timelineInterval) {
+                clearInterval(timelineInterval);
+                timelineInterval = null;
+            }
+        }
+        
         recreateGraph();
         
         // Reset legend toggles to show all node types
@@ -552,6 +593,182 @@ function calculateAverageConnections(nodes) {
     return totalConnections / nodes.length;
 }
 
+// Timeline functions
+function toggleTimelineMode() {
+    console.log('toggleTimelineMode called, current state:', isTimelineMode);
+    
+    isTimelineMode = !isTimelineMode;
+    const toggleBtn = document.getElementById('timeline-toggle');
+    const slider = document.getElementById('timeline-slider');
+    const playBtn = document.getElementById('timeline-play');
+    const pauseBtn = document.getElementById('timeline-pause');
+    const resetBtn = document.getElementById('timeline-reset');
+    const speedSelector = document.getElementById('timeline-speed');
+    
+    console.log('Found elements:', { toggleBtn, slider, playBtn, pauseBtn, resetBtn, speedSelector });
+    
+    if (isTimelineMode) {
+        // Enable timeline mode
+        toggleBtn.textContent = 'Disable';
+        slider.disabled = false;
+        playBtn.disabled = false;
+        pauseBtn.disabled = false;
+        resetBtn.disabled = false;
+        speedSelector.disabled = false;
+        
+        // Calculate max time from data
+        const nodeMaxTime = Math.max(...graphData.nodes.map(n => n.timestamp));
+        const linkMaxTime = Math.max(...graphData.links.map(l => l.timestamp));
+        maxTime = Math.max(nodeMaxTime, linkMaxTime);
+        
+        console.log('Time ranges:', { nodeMaxTime, linkMaxTime, maxTime });
+        
+        // Update slider range
+        slider.max = maxTime;
+        slider.value = 0;
+        currentTime = 0;
+        
+        // Initialize timeline data
+        timelineData = {
+            nodes: [...graphData.nodes],
+            links: [...graphData.links]
+        };
+        
+        // Hide all nodes and links initially
+        updateTimelineVisibility();
+        
+        console.log('Timeline mode enabled, max time:', maxTime);
+    } else {
+        // Disable timeline mode
+        toggleBtn.textContent = 'Enable';
+        slider.disabled = true;
+        playBtn.disabled = true;
+        pauseBtn.disabled = true;
+        resetBtn.disabled = true;
+        speedSelector.disabled = true;
+        
+        // Stop any running animation
+        if (timelineInterval) {
+            clearInterval(timelineInterval);
+            timelineInterval = null;
+        }
+        
+        // Show all nodes and links
+        node.style('opacity', 1).classed('timeline-hidden', false);
+        link.style('opacity', 1).classed('timeline-hidden', false);
+        
+        console.log('Timeline mode disabled');
+    }
+    
+    updateCurrentTimeDisplay();
+}
+
+function handleTimelineScrub(event) {
+    if (!isTimelineMode) return;
+    
+    currentTime = parseInt(event.target.value);
+    updateTimelineVisibility();
+    updateCurrentTimeDisplay();
+}
+
+function playTimeline() {
+    console.log('playTimeline called, isTimelineMode:', isTimelineMode, 'timelineInterval:', timelineInterval);
+    
+    if (!isTimelineMode || timelineInterval) {
+        console.log('Play blocked - timeline mode:', isTimelineMode, 'interval exists:', !!timelineInterval);
+        return;
+    }
+    
+    console.log('Starting timeline animation from time:', currentTime, 'to max:', maxTime, 'speed:', timelineSpeed);
+    
+    // Calculate interval based on speed (base interval is 200ms)
+    const baseInterval = 200;
+    const interval = baseInterval / timelineSpeed;
+    
+    timelineInterval = setInterval(() => {
+        currentTime++;
+        if (currentTime > maxTime) {
+            currentTime = 0;
+        }
+        
+        const slider = document.getElementById('timeline-slider');
+        slider.value = currentTime;
+        updateTimelineVisibility();
+        updateCurrentTimeDisplay();
+        
+        console.log('Timeline tick - current time:', currentTime, 'speed:', timelineSpeed);
+    }, interval);
+}
+
+function pauseTimeline() {
+    if (timelineInterval) {
+        clearInterval(timelineInterval);
+        timelineInterval = null;
+    }
+}
+
+function resetTimeline() {
+    if (!isTimelineMode) return;
+    
+    pauseTimeline();
+    currentTime = 0;
+    const slider = document.getElementById('timeline-slider');
+    slider.value = 0;
+    updateTimelineVisibility();
+    updateCurrentTimeDisplay();
+}
+
+function updateTimelineVisibility() {
+    if (!isTimelineMode) {
+        console.log('updateTimelineVisibility called but timeline mode is off');
+        return;
+    }
+    
+    console.log('Updating timeline visibility for time:', currentTime);
+    
+    let visibleNodes = 0;
+    let visibleLinks = 0;
+    
+    // Update node visibility
+    node.each(function(d) {
+        const nodeElement = d3.select(this);
+        if (d.timestamp <= currentTime) {
+            nodeElement.style('opacity', 1).classed('timeline-hidden', false);
+            visibleNodes++;
+            if (d.timestamp === currentTime) {
+                nodeElement.classed('timeline-new', true);
+                setTimeout(() => nodeElement.classed('timeline-new', false), 500);
+                console.log('New node appeared:', d.name, 'at time:', d.timestamp);
+            }
+        } else {
+            nodeElement.style('opacity', 0.3).classed('timeline-hidden', true);
+        }
+    });
+    
+    // Update link visibility
+    link.each(function(d) {
+        const linkElement = d3.select(this);
+        if (d.timestamp <= currentTime) {
+            linkElement.style('opacity', 1).classed('timeline-hidden', false);
+            visibleLinks++;
+            if (d.timestamp === currentTime) {
+                linkElement.classed('timeline-new', true);
+                setTimeout(() => linkElement.classed('timeline-new', false), 500);
+                console.log('New link appeared at time:', d.timestamp);
+            }
+        } else {
+            linkElement.style('opacity', 0.1).classed('timeline-hidden', true);
+        }
+    });
+    
+    console.log('Timeline update complete - visible nodes:', visibleNodes, 'visible links:', visibleLinks);
+}
+
+function updateCurrentTimeDisplay() {
+    const timeDisplay = document.getElementById('current-time');
+    timeDisplay.textContent = `Time: ${currentTime}`;
+}
+
 function clearSelection() {
     // Clear all selections
     selectedNodes = [];
@@ -856,7 +1073,8 @@ document.getElementById('addNode').addEventListener('click', () => {
         name: `Node ${newNodeId}`,
         group: Math.floor(Math.random() * 5) + 1,
         x: Math.random() * width,
-        y: Math.random() * height
+        y: Math.random() * height,
+        timestamp: Math.floor(Math.random() * 100) // Add a timestamp
     };
     
     graphData.nodes.push(newNode);
@@ -880,7 +1098,8 @@ document.getElementById('addEdge').addEventListener('click', () => {
         const newLink = {
             source: sourceNode.id,
             target: targetNode.id,
-            value: 1
+            value: 1,
+            timestamp: Math.floor(Math.random() * 100) // Add a timestamp
         };
         
         // Check if link already exists
@@ -1112,6 +1331,28 @@ document.getElementById('toggle-analysts').addEventListener('change', (event) =>
 document.getElementById('toggle-products').addEventListener('change', (event) => {
     toggleNodeType(3, event.target.checked);
 });
+
+// Timeline controls
+console.log('Setting up timeline event listeners...');
+document.getElementById('timeline-toggle').addEventListener('click', toggleTimelineMode);
+document.getElementById('timeline-slider').addEventListener('input', handleTimelineScrub);
+document.getElementById('timeline-play').addEventListener('click', playTimeline);
+document.getElementById('timeline-pause').addEventListener('click', pauseTimeline);
+document.getElementById('timeline-reset').addEventListener('click', resetTimeline);
+
+// Speed control
+document.getElementById('timeline-speed').addEventListener('change', (event) => {
+    timelineSpeed = parseFloat(event.target.value);
+    console.log('Timeline speed changed to:', timelineSpeed);
+    
+    // If timeline is currently playing, restart it with new speed
+    if (timelineInterval) {
+        pauseTimeline();
+        playTimeline();
+    }
+});
+
+console.log('Timeline event listeners attached');
 
 // Debug: Add global mouse event listener to test if events are being captured
 document.addEventListener('keydown', (event) => {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3 Graph Visualization</title>
+    <title>Signal Studios Agentic Swarm</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -54,6 +54,36 @@
                 </label>
                 <span class="legend-label">Products</span>
                 <div class="legend-color" style="background-color: #2ca02c;"></div>
+            </div>
+        </div>
+
+        <!-- Timeline Controls -->
+        <div class="timeline-controls">
+            <div class="timeline-header">
+                <span class="timeline-title">Timeline</span>
+                <div class="timeline-speed-control">
+                    <label for="timeline-speed">Speed:</label>
+                    <select id="timeline-speed" class="timeline-speed-selector">
+                        <option value="0.5">0.5x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="2">2x</option>
+                        <option value="3">3x</option>
+                        <option value="5">5x</option>
+                        <option value="10">10x</option>
+                    </select>
+                </div>
+                <button id="timeline-toggle" class="timeline-btn">Enable</button>
+            </div>
+            <div class="timeline-scrubber">
+                <input type="range" id="timeline-slider" min="0" max="100" value="0" step="1">
+                <div class="timeline-controls-row">
+                    <span id="current-time">0</span>
+                    <div class="timeline-buttons">
+                        <button id="timeline-play" class="timeline-btn" disabled>▶</button>
+                        <button id="timeline-pause" class="timeline-btn" disabled>⏸</button>
+                        <button id="timeline-reset" class="timeline-btn" disabled>⏮</button>
+                    </div>
+                </div>
             </div>
         </div>
         
