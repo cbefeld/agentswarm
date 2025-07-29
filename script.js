@@ -28,7 +28,9 @@ let selectionStart = null;
 const datasets = {
     'agents-analysts-products': generateAgentsAnalystsProducts,
     'agents-analysts-products-xxl': generateAgentsAnalystsProductsXXL,
-    'collaborative-session': generateCollaborativeSession
+    'collaborative-session': generateCollaborativeSession,
+    'tree-layout': generateTreeLayout,
+    'ai-reasoning-tree': generateAIReasoningTree
 };
 
 // Generate 105 nodes with 3 distinct areas
@@ -362,6 +364,231 @@ function generateAgentsAnalystsProductsXXL() {
     return { nodes, links };
 }
 
+// Generate tree layout dataset
+function generateTreeLayout() {
+    const nodes = [];
+    const links = [];
+    
+    // Create a hierarchical tree structure
+    const treeData = {
+        name: "Root",
+        children: [
+            {
+                name: "Branch A",
+                children: [
+                    { name: "Leaf A1", value: 10 },
+                    { name: "Leaf A2", value: 15 },
+                    { name: "Leaf A3", value: 8 }
+                ]
+            },
+            {
+                name: "Branch B", 
+                children: [
+                    { name: "Leaf B1", value: 12 },
+                    { name: "Leaf B2", value: 7 },
+                    {
+                        name: "Sub-branch B3",
+                        children: [
+                            { name: "Leaf B3a", value: 5 },
+                            { name: "Leaf B3b", value: 9 }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "Branch C",
+                children: [
+                    { name: "Leaf C1", value: 20 },
+                    { name: "Leaf C2", value: 14 },
+                    { name: "Leaf C3", value: 11 }
+                ]
+            }
+        ]
+    };
+    
+    // Use D3's hierarchical layout for top-down tree
+    const hierarchy = d3.hierarchy(treeData);
+    const treeLayout = d3.tree().size([width - 100, height - 100]);
+    const treeDataWithPositions = treeLayout(hierarchy);
+    
+    // Convert hierarchical data to flat nodes and links
+    let nodeId = 1;
+    const nodeMap = new Map();
+    
+    // First pass: create all nodes
+    function createNodes(node, level = 0) {
+        const nodeObj = {
+            id: nodeId++,
+            name: node.data.name,
+            group: level + 1, // Different group for each level
+            level: level,
+            value: node.data.value || 1,
+            x: node.x + 50, // Add offset to center in container
+            y: node.y + 50, // Add offset to center in container
+            timestamp: Math.floor(Math.random() * 100),
+            fx: node.x + 50, // Fix position for tree layout
+            fy: node.y + 50  // Fix position for tree layout
+        };
+        
+        nodes.push(nodeObj);
+        nodeMap.set(node.data.name, nodeObj.id);
+        
+        // Process children
+        if (node.children) {
+            node.children.forEach(child => createNodes(child, level + 1));
+        }
+    }
+    
+    // Second pass: create links
+    function createLinks(node) {
+        if (node.children) {
+            node.children.forEach(child => {
+                links.push({
+                    source: nodeMap.get(node.data.name),
+                    target: nodeMap.get(child.data.name),
+                    value: 1,
+                    type: 'tree',
+                    timestamp: Math.floor(Math.random() * 100)
+                });
+                createLinks(child);
+            });
+        }
+    }
+    
+    createNodes(treeDataWithPositions);
+    createLinks(treeDataWithPositions);
+    
+    return { nodes, links };
+}
+
+// Generate AI reasoning tree dataset - visualizing the thought process
+function generateAIReasoningTree() {
+    const nodes = [];
+    const links = [];
+    
+    // Create a hierarchical tree structure representing my reasoning process
+    const treeData = {
+        name: "Problem: Make Tree Layout Top-Down",
+        children: [
+            {
+                name: "Analyze Current State",
+                children: [
+                    { name: "Current: Random positioning", value: 1 },
+                    { name: "Current: Force-directed layout", value: 1 },
+                    { name: "Current: No hierarchy structure", value: 1 }
+                ]
+            },
+            {
+                name: "Research D3 Capabilities", 
+                children: [
+                    { name: "Discover d3.hierarchy()", value: 2 },
+                    { name: "Discover d3.tree() layout", value: 2 },
+                    { name: "Learn about hierarchical positioning", value: 2 }
+                ]
+            },
+            {
+                name: "Design Solution",
+                children: [
+                    { name: "Use d3.tree() for positioning", value: 3 },
+                    { name: "Fix node positions with fx/fy", value: 3 },
+                    { name: "Disable force simulation for tree", value: 3 }
+                ]
+            },
+            {
+                name: "Implementation Steps",
+                children: [
+                    {
+                        name: "Convert Data Structure",
+                        children: [
+                            { name: "Create hierarchy object", value: 4 },
+                            { name: "Apply tree layout", value: 4 },
+                            { name: "Extract x,y coordinates", value: 4 }
+                        ]
+                    },
+                    {
+                        name: "Fix Node Positions",
+                        children: [
+                            { name: "Add fx property", value: 5 },
+                            { name: "Add fy property", value: 5 },
+                            { name: "Prevent force movement", value: 5 }
+                        ]
+                    },
+                    {
+                        name: "Update Simulation",
+                        children: [
+                            { name: "Disable charge forces", value: 6 },
+                            { name: "Disable centering forces", value: 6 },
+                            { name: "Reduce link distance", value: 6 }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "Validation & Testing",
+                children: [
+                    { name: "Verify root at top", value: 7 },
+                    { name: "Check downward flow", value: 7 },
+                    { name: "Test with different data", value: 7 }
+                ]
+            }
+        ]
+    };
+    
+    // Use D3's hierarchical layout for top-down tree
+    const hierarchy = d3.hierarchy(treeData);
+    const treeLayout = d3.tree().size([width - 100, height - 100]);
+    const treeDataWithPositions = treeLayout(hierarchy);
+    
+    // Convert hierarchical data to flat nodes and links
+    let nodeId = 1;
+    const nodeMap = new Map();
+    
+    // First pass: create all nodes
+    function createNodes(node, level = 0) {
+        const nodeObj = {
+            id: nodeId++,
+            name: node.data.name,
+            group: level + 1, // Different group for each level
+            level: level,
+            value: node.data.value || 1,
+            x: node.x + 50, // Add offset to center in container
+            y: node.y + 50, // Add offset to center in container
+            timestamp: Math.floor(Math.random() * 100),
+            fx: node.x + 50, // Fix position for tree layout
+            fy: node.y + 50  // Fix position for tree layout
+        };
+        
+        nodes.push(nodeObj);
+        nodeMap.set(node.data.name, nodeObj.id);
+        
+        // Process children
+        if (node.children) {
+            node.children.forEach(child => createNodes(child, level + 1));
+        }
+    }
+    
+    // Second pass: create links
+    function createLinks(node) {
+        if (node.children) {
+            node.children.forEach(child => {
+                links.push({
+                    source: nodeMap.get(node.data.name),
+                    target: nodeMap.get(child.data.name),
+                    value: 1,
+                    type: 'tree',
+                    timestamp: Math.floor(Math.random() * 100)
+                });
+                createLinks(child);
+            });
+        }
+    }
+    
+    createNodes(treeDataWithPositions);
+    createLinks(treeDataWithPositions);
+    
+    return { nodes, links };
+}
+
 // Function to switch datasets
 function switchDataset(datasetName) {
     if (datasets[datasetName]) {
@@ -531,6 +758,13 @@ let nodeLabel = g.append('g')
     .enter().append('text')
     .attr('class', 'node-label')
     .attr('dy', '.35em')
+            .attr('class', d => {
+            // Check if this is a tree layout dataset
+            const currentDataset = document.getElementById('dataset-selector').value;
+            const isTreeLayout = currentDataset === 'tree-layout' || currentDataset === 'ai-reasoning-tree';
+            
+            return isTreeLayout ? 'node-label tree-layout' : 'node-label';
+        })
     .text(d => d.name);
 
 // Drag behavior - enhanced for multi-node selection
@@ -1090,8 +1324,7 @@ simulation.on('tick', () => {
         .attr('cy', d => d.y);
 
     nodeLabel
-        .attr('x', d => d.x)
-        .attr('y', d => d.y);
+        .attr('transform', d => `translate(${d.x}, ${d.y}) rotate(45)`);
 });
 
 // Node click handler
@@ -1458,6 +1691,13 @@ function recreateGraph() {
         .enter().append('text')
         .attr('class', 'node-label')
         .attr('dy', '.35em')
+        .attr('class', d => {
+            // Check if this is a tree layout dataset
+            const currentDataset = document.getElementById('dataset-selector').value;
+            const isTreeLayout = currentDataset === 'tree-layout' || currentDataset === 'ai-reasoning-tree';
+            
+            return isTreeLayout ? 'node-label tree-layout' : 'node-label';
+        })
         .text(d => d.name);
     
     // Reattach event handlers
@@ -1530,21 +1770,30 @@ node.on('click', function(event, d) {
     simulation.nodes(graphData.nodes);
     simulation.force('link').links(graphData.links);
     
-    // Calculate group-based charge strength
-    const groupChargeStrength = baseChargeStrength * densityMultiplier * groupSpacingMultiplier;
+    // Check if this is the tree layout dataset
+    const isTreeLayout = graphData.nodes.some(node => node.fx !== undefined && node.fy !== undefined);
     
-    // Calculate centering strength based on group spacing
-    const centeringStrength = groupSpacingMultiplier < 1 ? (1 - groupSpacingMultiplier) * 0.3 : 0;
-    
-    simulation.force('link').distance(baseLinkDistance * densityMultiplier);
-    simulation.force('charge').strength(groupChargeStrength);
-    simulation.force('collision').radius(baseCollisionRadius * densityMultiplier);
-    
-    // Add or update centering force
-    if (centeringStrength > 0) {
-        simulation.force('center', d3.forceCenter(width / 2, height / 2).strength(centeringStrength));
+    if (isTreeLayout) {
+        // For tree layout, use fixed positions and minimal forces
+        simulation.force('link').distance(50);
+        simulation.force('charge').strength(0); // No charge force for tree
+        simulation.force('collision').radius(20);
+        simulation.force('center', null); // No centering force for tree
     } else {
-        simulation.force('center', d3.forceCenter(width / 2, height / 2));
+        // For other layouts, use adaptive parameters
+        const groupChargeStrength = baseChargeStrength * densityMultiplier * groupSpacingMultiplier;
+        const centeringStrength = groupSpacingMultiplier < 1 ? (1 - groupSpacingMultiplier) * 0.3 : 0;
+        
+        simulation.force('link').distance(baseLinkDistance * densityMultiplier);
+        simulation.force('charge').strength(groupChargeStrength);
+        simulation.force('collision').radius(baseCollisionRadius * densityMultiplier);
+        
+        // Add or update centering force
+        if (centeringStrength > 0) {
+            simulation.force('center', d3.forceCenter(width / 2, height / 2).strength(centeringStrength));
+        } else {
+            simulation.force('center', d3.forceCenter(width / 2, height / 2));
+        }
     }
     
     simulation.alpha(1).restart();
@@ -1562,8 +1811,19 @@ node.on('click', function(event, d) {
             .attr('cy', d => d.y);
 
         nodeLabel
-            .attr('x', d => d.x)
-            .attr('y', d => d.y);
+            .attr('transform', d => {
+                // Check if this is a tree layout dataset
+                const currentDataset = document.getElementById('dataset-selector').value;
+                const isTreeLayout = currentDataset === 'tree-layout' || currentDataset === 'ai-reasoning-tree';
+                
+                if (isTreeLayout) {
+                    // For tree layouts: offset + rotation
+                    return `translate(${d.x + 12}, ${d.y + 12}) rotate(45)`;
+                } else {
+                    // For other layouts: normal positioning
+                    return `translate(${d.x}, ${d.y})`;
+                }
+            });
     });
     
     // Ensure all elements are visible after recreation
@@ -1638,8 +1898,19 @@ function updateVisualization() {
 
     // Update label positions
     nodeLabel
-        .attr('x', d => d.x)
-        .attr('y', d => d.y);
+        .attr('transform', d => {
+            // Check if this is a tree layout dataset
+            const currentDataset = document.getElementById('dataset-selector').value;
+            const isTreeLayout = currentDataset === 'tree-layout' || currentDataset === 'ai-reasoning-tree';
+            
+            if (isTreeLayout) {
+                // For tree layouts: offset + rotation + left alignment
+                return `translate(${d.x + 12}, ${d.y + 12}) rotate(45)`;
+            } else {
+                // For other layouts: normal positioning
+                return `translate(${d.x}, ${d.y})`;
+            }
+        });
 }
 
 
@@ -1793,6 +2064,14 @@ function updateLegendLabels(datasetName) {
         legendAgents.textContent = 'Human Commands';
         legendAnalysts.textContent = 'AI Responses';
         legendProducts.textContent = 'Code Changes';
+    } else if (datasetName === 'tree-layout') {
+        legendAgents.textContent = 'Root Level';
+        legendAnalysts.textContent = 'Branch Level';
+        legendProducts.textContent = 'Leaf Level';
+    } else if (datasetName === 'ai-reasoning-tree') {
+        legendAgents.textContent = 'Problem Analysis';
+        legendAnalysts.textContent = 'Solution Design';
+        legendProducts.textContent = 'Implementation';
     } else {
         legendAgents.textContent = 'Agents';
         legendAnalysts.textContent = 'Analysts';
@@ -1892,23 +2171,31 @@ function updateGroupSpacing(value) {
 }
 
 function updateSimulationForces() {
-    // Calculate group-based charge strength
-    const groupChargeStrength = baseChargeStrength * densityMultiplier * groupSpacingMultiplier;
+    // Check if this is the tree layout dataset
+    const isTreeLayout = graphData.nodes.some(node => node.fx !== undefined && node.fy !== undefined);
     
-    // Calculate centering strength based on group spacing
-    // Lower group spacing = stronger centering force to pull groups together
-    const centeringStrength = groupSpacingMultiplier < 1 ? (1 - groupSpacingMultiplier) * 0.3 : 0;
-    
-    // Update simulation forces
-    simulation.force('link').distance(baseLinkDistance * densityMultiplier);
-    simulation.force('charge').strength(groupChargeStrength);
-    simulation.force('collision').radius(baseCollisionRadius * densityMultiplier);
-    
-    // Add or update centering force
-    if (centeringStrength > 0) {
-        simulation.force('center', d3.forceCenter(width / 2, height / 2).strength(centeringStrength));
+    if (isTreeLayout) {
+        // For tree layout, use fixed positions and minimal forces
+        simulation.force('link').distance(50);
+        simulation.force('charge').strength(0); // No charge force for tree
+        simulation.force('collision').radius(20);
+        simulation.force('center', null); // No centering force for tree
     } else {
-        simulation.force('center', d3.forceCenter(width / 2, height / 2));
+        // For other layouts, use adaptive parameters
+        const groupChargeStrength = baseChargeStrength * densityMultiplier * groupSpacingMultiplier;
+        const centeringStrength = groupSpacingMultiplier < 1 ? (1 - groupSpacingMultiplier) * 0.3 : 0;
+        
+        // Update simulation forces
+        simulation.force('link').distance(baseLinkDistance * densityMultiplier);
+        simulation.force('charge').strength(groupChargeStrength);
+        simulation.force('collision').radius(baseCollisionRadius * densityMultiplier);
+        
+        // Add or update centering force
+        if (centeringStrength > 0) {
+            simulation.force('center', d3.forceCenter(width / 2, height / 2).strength(centeringStrength));
+        } else {
+            simulation.force('center', d3.forceCenter(width / 2, height / 2));
+        }
     }
     
     // Restart simulation with new parameters
