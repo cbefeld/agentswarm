@@ -16,8 +16,8 @@
             <div class="nav-controls">
                 <select id="dataset-selector" class="dataset-selector">
                     <option value="agents-analysts-products">Agents, Analysts, Products</option>
-                    <option value="agents-analysts-products-xxl">Agents, Analysts, Products XXL</option>
                     <option value="collaborative-session">Collaborative Session</option>
+                    <option value="agents-analysts-products-xxl">Agents, Analysts, Products XXL</option>
                 </select>
                 <button id="addNode">Add Node</button>
                 <button id="addEdge">Add Edge</button>
@@ -30,83 +30,102 @@
     <div class="container">
         <header>
         </header>
-        
-        <div class="legend">
-            <h4>Node Types</h4>
-            <div class="legend-item">
-                <label class="toggle-switch">
-                    <input type="checkbox" id="toggle-agents" checked>
-                    <span class="slider"></span>
-                </label>
-                <span class="legend-label" id="legend-agents">Agents</span>
-                <div class="legend-color" style="background-color: #1f77b4;"></div>
-            </div>
-            <div class="legend-item">
-                <label class="toggle-switch">
-                    <input type="checkbox" id="toggle-analysts" checked>
-                    <span class="slider"></span>
-                </label>
-                <span class="legend-label" id="legend-analysts">Analysts</span>
-                <div class="legend-color" style="background-color: #ff7f0e;"></div>
-            </div>
-            <div class="legend-item">
-                <label class="toggle-switch">
-                    <input type="checkbox" id="toggle-products" checked>
-                    <span class="slider"></span>
-                </label>
-                <span class="legend-label" id="legend-products">Products</span>
-                <div class="legend-color" style="background-color: #2ca02c;"></div>
-            </div>
-        </div>
 
-        <!-- Timeline Controls -->
-        <div class="timeline-controls">
-            <div class="timeline-header">
-                <span class="timeline-title">Timeline</span>
-                <div class="timeline-speed-control">
-                    <label for="timeline-speed">Speed:</label>
-                    <select id="timeline-speed" class="timeline-speed-selector">
-                        <option value="0.5">0.5x</option>
-                        <option value="1" selected>1x</option>
-                        <option value="2">2x</option>
-                        <option value="3">3x</option>
-                        <option value="5">5x</option>
-                        <option value="10">10x</option>
-                    </select>
+        <div class="controls-panel">
+            <div class="legend">
+                <div class="legend-item">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-agents" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="legend-label" id="legend-agents">Agents</span>
                 </div>
-                <button id="timeline-toggle" class="timeline-btn">Enable</button>
+                <div class="legend-item">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-analysts" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="legend-label" id="legend-analysts">Analysts</span>
+                </div>
+                <div class="legend-item">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggle-products" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="legend-label" id="legend-products">Products</span>
+                </div>
             </div>
-            <div class="timeline-scrubber">
-                <input type="range" id="timeline-slider" min="0" max="100" value="0" step="1">
-                <div class="timeline-controls-row">
-                    <span id="current-time">0</span>
-                    <div class="timeline-buttons">
-                        <button id="timeline-play" class="timeline-btn" disabled>▶</button>
-                        <button id="timeline-pause" class="timeline-btn" disabled>⏸</button>
-                        <button id="timeline-reset" class="timeline-btn" disabled>⏮</button>
+
+            <!-- Multi-Select Mode Control (Commented Out) -->
+            <!--
+            <div class="multi-select-control">
+                <div class="multi-select-label">Multi-Select Mode</div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-multi-select">
+                    <span class="slider"></span>
+                </label>
+                <span class="multi-select-status">Off</span>
+            </div>
+            -->
+
+            <!-- Timeline Controls -->
+            <div class="timeline-controls">
+                <div class="timeline-header">
+                    <span class="timeline-title">Timeline</span>
+                    <div class="timeline-speed-control">
+                        <label for="timeline-speed">Speed:</label>
+                        <select id="timeline-speed" class="timeline-speed-selector">
+                            <option value="0.5">0.5x</option>
+                            <option value="1" selected>1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="5">5x</option>
+                            <option value="10">10x</option>
+                        </select>
+                    </div>
+                    <div class="real-time-display">
+                        <span class="real-time-clock">--:--:--</span>
+                    </div>
+                    <button id="timeline-toggle" class="timeline-btn">Enable</button>
+                </div>
+                <div class="timeline-scrubber">
+                    <input type="range" id="timeline-slider" min="0" max="100" value="0" step="1">
+                    <div class="timeline-controls-row">
+                        <span id="current-time">0:00</span>
+                        <div class="timeline-buttons">
+                            <button id="timeline-play" class="timeline-btn" disabled>▶</button>
+                            <button id="timeline-pause" class="timeline-btn" disabled>⏸</button>
+                            <button id="timeline-reset" class="timeline-btn" disabled>⏮</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="zoom-controls">
-            <button id="zoomIn" class="zoom-btn" title="Zoom In">+</button>
-            <button id="zoomOut" class="zoom-btn" title="Zoom Out">−</button>
-            <button id="zoomReset" class="zoom-btn" title="Reset Zoom">⌂</button>
-            <div class="zoom-level" id="zoomLevel">100%</div>
-        </div>
-        
-        <div class="density-controls">
-            <div class="density-label">Density</div>
-            <input type="range" id="density-slider" min="0.1" max="3" value="1" step="0.1" class="density-slider">
-            <div class="density-value" id="densityValue">1.0x</div>
             
-            <div class="density-label">Group Spacing</div>
-            <input type="range" id="group-spacing-slider" min="0.5" max="5" value="1" step="0.1" class="density-slider">
-            <div class="density-value" id="groupSpacingValue">1.0x</div>
+            <div class="zoom-controls">
+                <button id="zoomIn" class="zoom-btn" title="Zoom In">+</button>
+                <button id="zoomOut" class="zoom-btn" title="Zoom Out">−</button>
+                <button id="zoomReset" class="zoom-btn" title="Reset Zoom">⌂</button>
+                <div class="zoom-level" id="zoomLevel">100%</div>
+            </div>
+            
+            <div class="density-controls">
+                <div class="density-label">Density</div>
+                <input type="range" id="density-slider" min="0.1" max="3" value="1" step="0.1" class="density-slider">
+                <div class="density-value" id="densityValue">1.0x</div>
+                
+                <div class="density-label">Group Spacing</div>
+                <input type="range" id="group-spacing-slider" min="0.5" max="5" value="1" step="0.1" class="density-slider">
+                <div class="density-value" id="groupSpacingValue">1.0x</div>
+            </div>
+
+
         </div>
         
-        <div id="graph-container"></div>
+        <div id="graph-container">
+            <div id="selection-count" class="selection-count"></div>
+        </div>
+
+
         
         <div class="info-panel">
             <h3>Graph Info</h3>
@@ -167,7 +186,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html> 

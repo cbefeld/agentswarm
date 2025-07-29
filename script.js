@@ -136,50 +136,59 @@ function generateCollaborativeSession() {
     const nodes = [];
     const links = [];
     
+    // Real-world timestamps (in seconds from start)
+    const startTime = Date.now() - (2 * 60 * 60 * 1000); // 2 hours ago
+    
     // Human Commands (Group 1)
     const humanCommands = [
-        { id: 1, name: "Make timeline wider", timestamp: 0, group: 1 },
-        { id: 2, name: "Add speed control", timestamp: 5, group: 1 },
-        { id: 3, name: "Add 10x speed option", timestamp: 10, group: 1 },
-        { id: 4, name: "Move speed controls left", timestamp: 12, group: 1 },
-        { id: 5, name: "Change page title", timestamp: 15, group: 1 },
-        { id: 6, name: "Create timeline branch", timestamp: 18, group: 1 },
-        { id: 7, name: "Create dark-mode branch", timestamp: 25, group: 1 },
-        { id: 8, name: "Implement dark mode", timestamp: 30, group: 1 },
-        { id: 9, name: "Make greys darker", timestamp: 45, group: 1 },
-        { id: 10, name: "Create experimental-data branch", timestamp: 50, group: 1 },
-        { id: 11, name: "Create collaborative dataset", timestamp: 55, group: 1 }
+        { id: 1, name: "Make timeline wider", timestamp: 0, group: 1, realTime: startTime },
+        { id: 2, name: "Add speed control", timestamp: 45, group: 1, realTime: startTime + 45000 },
+        { id: 3, name: "Add 10x speed option", timestamp: 120, group: 1, realTime: startTime + 120000 },
+        { id: 4, name: "Move speed controls left", timestamp: 180, group: 1, realTime: startTime + 180000 },
+        { id: 5, name: "Change page title", timestamp: 240, group: 1, realTime: startTime + 240000 },
+        { id: 6, name: "Create timeline branch", timestamp: 300, group: 1, realTime: startTime + 300000 },
+        { id: 7, name: "Create dark-mode branch", timestamp: 420, group: 1, realTime: startTime + 420000 },
+        { id: 8, name: "Implement dark mode", timestamp: 540, group: 1, realTime: startTime + 540000 },
+        { id: 9, name: "Make greys darker", timestamp: 720, group: 1, realTime: startTime + 720000 },
+        { id: 10, name: "Create experimental-data branch", timestamp: 840, group: 1, realTime: startTime + 840000 },
+        { id: 11, name: "Create collaborative dataset", timestamp: 960, group: 1, realTime: startTime + 960000 },
+        { id: 12, name: "Add real-time data", timestamp: 1080, group: 1, realTime: startTime + 1080000 },
+        { id: 13, name: "Implement live updates", timestamp: 1200, group: 1, realTime: startTime + 1200000 }
     ];
     
     // AI Responses (Group 2)
     const aiResponses = [
-        { id: 12, name: "Timeline width increased", timestamp: 2, group: 2 },
-        { id: 13, name: "Speed control added", timestamp: 7, group: 2 },
-        { id: 14, name: "10x speed implemented", timestamp: 11, group: 2 },
-        { id: 15, name: "Speed controls repositioned", timestamp: 13, group: 2 },
-        { id: 16, name: "Title updated", timestamp: 16, group: 2 },
-        { id: 17, name: "Timeline branch created", timestamp: 20, group: 2 },
-        { id: 18, name: "Dark-mode branch ready", timestamp: 27, group: 2 },
-        { id: 19, name: "Dark mode implemented", timestamp: 35, group: 2 },
-        { id: 20, name: "Darker greys applied", timestamp: 47, group: 2 },
-        { id: 21, name: "Experimental branch ready", timestamp: 52, group: 2 },
-        { id: 22, name: "Creating collaborative dataset", timestamp: 57, group: 2 }
+        { id: 14, name: "Timeline width increased", timestamp: 15, group: 2, realTime: startTime + 15000 },
+        { id: 15, name: "Speed control added", timestamp: 60, group: 2, realTime: startTime + 60000 },
+        { id: 16, name: "10x speed implemented", timestamp: 135, group: 2, realTime: startTime + 135000 },
+        { id: 17, name: "Speed controls repositioned", timestamp: 195, group: 2, realTime: startTime + 195000 },
+        { id: 18, name: "Title updated", timestamp: 255, group: 2, realTime: startTime + 255000 },
+        { id: 19, name: "Timeline branch created", timestamp: 315, group: 2, realTime: startTime + 315000 },
+        { id: 20, name: "Dark-mode branch ready", timestamp: 435, group: 2, realTime: startTime + 435000 },
+        { id: 21, name: "Dark mode implemented", timestamp: 555, group: 2, realTime: startTime + 555000 },
+        { id: 22, name: "Darker greys applied", timestamp: 735, group: 2, realTime: startTime + 735000 },
+        { id: 23, name: "Experimental branch ready", timestamp: 855, group: 2, realTime: startTime + 855000 },
+        { id: 24, name: "Creating collaborative dataset", timestamp: 975, group: 2, realTime: startTime + 975000 },
+        { id: 25, name: "Real-time data connected", timestamp: 1095, group: 2, realTime: startTime + 1095000 },
+        { id: 26, name: "Live updates active", timestamp: 1215, group: 2, realTime: startTime + 1215000 }
     ];
     
     // Code Changes (Group 3)
     const codeChanges = [
-        { id: 23, name: "CSS: min-width 400px", timestamp: 3, group: 3 },
-        { id: 24, name: "HTML: Speed selector", timestamp: 8, group: 3 },
-        { id: 25, name: "JS: Speed functionality", timestamp: 9, group: 3 },
-        { id: 26, name: "CSS: Speed positioning", timestamp: 14, group: 3 },
-        { id: 27, name: "HTML: Title change", timestamp: 17, group: 3 },
-        { id: 28, name: "Git: Timeline branch", timestamp: 22, group: 3 },
-        { id: 29, name: "Git: Dark-mode branch", timestamp: 28, group: 3 },
-        { id: 30, name: "CSS: Dark theme vars", timestamp: 36, group: 3 },
-        { id: 31, name: "JS: Dark mode toggle", timestamp: 40, group: 3 },
-        { id: 32, name: "CSS: Darker colors", timestamp: 48, group: 3 },
-        { id: 33, name: "Git: Experimental branch", timestamp: 53, group: 3 },
-        { id: 34, name: "JS: Dataset function", timestamp: 58, group: 3 }
+        { id: 27, name: "CSS: min-width 400px", timestamp: 20, group: 3, realTime: startTime + 20000 },
+        { id: 28, name: "HTML: Speed selector", timestamp: 70, group: 3, realTime: startTime + 70000 },
+        { id: 29, name: "JS: Speed functionality", timestamp: 75, group: 3, realTime: startTime + 75000 },
+        { id: 30, name: "CSS: Speed positioning", timestamp: 210, group: 3, realTime: startTime + 210000 },
+        { id: 31, name: "HTML: Title change", timestamp: 270, group: 3, realTime: startTime + 270000 },
+        { id: 32, name: "Git: Timeline branch", timestamp: 330, group: 3, realTime: startTime + 330000 },
+        { id: 33, name: "Git: Dark-mode branch", timestamp: 450, group: 3, realTime: startTime + 450000 },
+        { id: 34, name: "CSS: Dark theme vars", timestamp: 570, group: 3, realTime: startTime + 570000 },
+        { id: 35, name: "JS: Dark mode toggle", timestamp: 600, group: 3, realTime: startTime + 600000 },
+        { id: 36, name: "CSS: Darker colors", timestamp: 750, group: 3, realTime: startTime + 750000 },
+        { id: 37, name: "Git: Experimental branch", timestamp: 870, group: 3, realTime: startTime + 870000 },
+        { id: 38, name: "JS: Dataset function", timestamp: 990, group: 3, realTime: startTime + 990000 },
+        { id: 39, name: "JS: Real-time updates", timestamp: 1110, group: 3, realTime: startTime + 1110000 },
+        { id: 40, name: "JS: Live data sync", timestamp: 1230, group: 3, realTime: startTime + 1230000 }
     ];
     
     // Add all nodes
@@ -188,50 +197,57 @@ function generateCollaborativeSession() {
     // Create connections between related items
     const connections = [
         // Timeline width feature
-        { source: 1, target: 12, timestamp: 2 }, // Command -> Response
-        { source: 12, target: 23, timestamp: 3 }, // Response -> Code Change
+        { source: 1, target: 14, timestamp: 15 }, // Command -> Response
+        { source: 14, target: 27, timestamp: 20 }, // Response -> Code Change
         
         // Speed control feature
-        { source: 2, target: 13, timestamp: 7 }, // Command -> Response
-        { source: 13, target: 24, timestamp: 8 }, // Response -> HTML
-        { source: 13, target: 25, timestamp: 9 }, // Response -> JS
+        { source: 2, target: 15, timestamp: 60 }, // Command -> Response
+        { source: 15, target: 28, timestamp: 70 }, // Response -> HTML
+        { source: 15, target: 29, timestamp: 75 }, // Response -> JS
         
         // Speed positioning
-        { source: 4, target: 15, timestamp: 13 }, // Command -> Response
-        { source: 15, target: 26, timestamp: 14 }, // Response -> Code
+        { source: 4, target: 17, timestamp: 195 }, // Command -> Response
+        { source: 17, target: 30, timestamp: 210 }, // Response -> Code
         
         // Title change
-        { source: 5, target: 16, timestamp: 16 }, // Command -> Response
-        { source: 16, target: 27, timestamp: 17 }, // Response -> Code
+        { source: 5, target: 18, timestamp: 255 }, // Command -> Response
+        { source: 18, target: 31, timestamp: 270 }, // Response -> Code
         
         // Branch creation
-        { source: 6, target: 17, timestamp: 20 }, // Command -> Response
-        { source: 17, target: 28, timestamp: 22 }, // Response -> Git
+        { source: 6, target: 19, timestamp: 315 }, // Command -> Response
+        { source: 19, target: 32, timestamp: 330 }, // Response -> Git
         
         // Dark mode implementation
-        { source: 8, target: 19, timestamp: 35 }, // Command -> Response
-        { source: 19, target: 30, timestamp: 36 }, // Response -> CSS
-        { source: 19, target: 31, timestamp: 40 }, // Response -> JS
+        { source: 8, target: 21, timestamp: 555 }, // Command -> Response
+        { source: 21, target: 34, timestamp: 570 }, // Response -> CSS
+        { source: 21, target: 35, timestamp: 600 }, // Response -> JS
         
         // Darker colors
-        { source: 9, target: 20, timestamp: 47 }, // Command -> Response
-        { source: 20, target: 32, timestamp: 48 }, // Response -> Code
+        { source: 9, target: 22, timestamp: 735 }, // Command -> Response
+        { source: 22, target: 36, timestamp: 750 }, // Response -> Code
         
         // Experimental branch
-        { source: 10, target: 21, timestamp: 52 }, // Command -> Response
-        { source: 21, target: 33, timestamp: 53 }, // Response -> Git
+        { source: 10, target: 23, timestamp: 855 }, // Command -> Response
+        { source: 23, target: 37, timestamp: 870 }, // Response -> Git
         
         // Current dataset creation
-        { source: 11, target: 22, timestamp: 57 }, // Command -> Response
-        { source: 22, target: 34, timestamp: 58 }, // Response -> Code
+        { source: 11, target: 24, timestamp: 975 }, // Command -> Response
+        { source: 24, target: 38, timestamp: 990 }, // Response -> Code
+        
+        // Real-time data features
+        { source: 12, target: 25, timestamp: 1095 }, // Command -> Response
+        { source: 25, target: 39, timestamp: 1110 }, // Response -> Code
+        { source: 13, target: 26, timestamp: 1215 }, // Command -> Response
+        { source: 26, target: 40, timestamp: 1230 }, // Response -> Code
         
         // Cross-feature connections
-        { source: 3, target: 14, timestamp: 11 }, // 10x speed -> Response
-        { source: 7, target: 18, timestamp: 27 }, // Dark branch -> Response
+        { source: 3, target: 16, timestamp: 135 }, // 10x speed -> Response
+        { source: 7, target: 20, timestamp: 435 }, // Dark branch -> Response
         
         // Feature evolution connections
-        { source: 23, target: 24, timestamp: 8 }, // Timeline -> Speed
-        { source: 24, target: 30, timestamp: 36 }, // Speed -> Dark mode
+        { source: 27, target: 28, timestamp: 70 }, // Timeline -> Speed
+        { source: 28, target: 34, timestamp: 570 }, // Speed -> Dark mode
+        { source: 34, target: 39, timestamp: 1110 }, // Dark mode -> Real-time
         { source: 30, target: 32, timestamp: 48 }, // Dark mode -> Darker
     ];
     
@@ -428,7 +444,17 @@ svg.call(zoom);
 // Add box selection event handlers
 svg.on('mousedown', handleMouseDown)
    .on('mousemove', handleMouseMove)
-   .on('mouseup', handleMouseUp);
+   .on('mouseup', handleMouseUp)
+   .on('click', function(event) {
+       // Canvas click handler to deselect all nodes
+       if (event.target === this) { // Only if clicking on the SVG background
+           console.log('Canvas clicked - deselecting all nodes');
+           selectedNodes = [];
+           node.classed('selected', false);
+           link.classed('selected', false);
+           updateNodeInfoForSelection();
+       }
+   });
 
 // Create a group for all graph elements
 const g = svg.append('g');
@@ -507,23 +533,77 @@ let nodeLabel = g.append('g')
     .attr('dy', '.35em')
     .text(d => d.name);
 
-// Drag behavior
+// Drag behavior - enhanced for multi-node selection
 function drag(simulation) {
+    let dragOffset = { x: 0, y: 0 };
+    let selectedNodesData = [];
+    
     function dragstarted(event, d) {
         if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
+        
+        // Check if this node is part of a multi-selection
+        const isMultiSelection = selectedNodes.length > 1 && selectedNodes.includes(d.id);
+        
+        if (isMultiSelection) {
+            // Store data for all selected nodes
+            selectedNodesData = graphData.nodes.filter(node => selectedNodes.includes(node.id));
+            
+            // Calculate offset from drag start position
+            dragOffset.x = event.x - d.x;
+            dragOffset.y = event.y - d.y;
+            
+            // Fix positions for all selected nodes
+            selectedNodesData.forEach(node => {
+                node.fx = node.x;
+                node.fy = node.y;
+            });
+            
+            console.log('Multi-drag started with', selectedNodesData.length, 'nodes');
+        } else {
+            // Single node drag
+            d.fx = d.x;
+            d.fy = d.y;
+            selectedNodesData = [d];
+            dragOffset = { x: 0, y: 0 };
+        }
     }
 
     function dragged(event, d) {
-        d.fx = event.x;
-        d.fy = event.y;
+        if (selectedNodesData.length > 1) {
+            // Multi-node drag
+            const dx = event.x - d.x;
+            const dy = event.y - d.y;
+            
+            selectedNodesData.forEach(node => {
+                node.fx += dx;
+                node.fy += dy;
+            });
+            
+            console.log('Multi-dragging', selectedNodesData.length, 'nodes');
+        } else {
+            // Single node drag
+            d.fx = event.x;
+            d.fy = event.y;
+        }
     }
 
     function dragended(event, d) {
         if (!event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
+        
+        if (selectedNodesData.length > 1) {
+            // Release all selected nodes
+            selectedNodesData.forEach(node => {
+                node.fx = null;
+                node.fy = null;
+            });
+            console.log('Multi-drag ended');
+        } else {
+            // Release single node
+            d.fx = null;
+            d.fy = null;
+        }
+        
+        selectedNodesData = [];
     }
 
     return d3.drag()
@@ -606,27 +686,89 @@ function handleMouseUp(event) {
         
         console.log('Selection box bounds:', { boxX, boxY, boxWidth, boxHeight });
         
-        // Find nodes within the selection box
+        // Find nodes within the selection box using D3's pointer and transform
         const selectedNodeIds = [];
+        
+        // Get the current transform from the graph group
+        const graphGroup = d3.select('g').node();
+        const transform = d3.zoomTransform(graphGroup);
+        
+        // Convert selection box coordinates to graph coordinates
+        const graphBoxX = (boxX - transform.x) / transform.k;
+        const graphBoxY = (boxY - transform.y) / transform.k;
+        const graphBoxWidth = boxWidth / transform.k;
+        const graphBoxHeight = boxHeight / transform.k;
+        
+        console.log('Selection box in graph coordinates:', {
+            x: graphBoxX, y: graphBoxY, width: graphBoxWidth, height: graphBoxHeight
+        });
+        
+        // Check each node using graph coordinates
         node.each(function(d) {
             const nodeX = d.x;
             const nodeY = d.y;
             
-            console.log(`Node ${d.id} at graph coords: (${nodeX}, ${nodeY})`);
-            
-            if (nodeX >= boxX && nodeX <= boxX + boxWidth &&
-                nodeY >= boxY && nodeY <= boxY + boxHeight) {
+            // Check if node center is within the selection box
+            if (nodeX >= graphBoxX && nodeX <= graphBoxX + graphBoxWidth &&
+                nodeY >= graphBoxY && nodeY <= graphBoxY + graphBoxHeight) {
                 selectedNodeIds.push(d.id);
-                console.log(`Node ${d.id} is within selection box`);
+                console.log(`Node ${d.id} (${nodeX}, ${nodeY}) is within selection box`);
             }
         });
         
         console.log('Found nodes in selection:', selectedNodeIds);
         
-        // Update selection
+        // Apply box selection
+        console.log('Box selection found nodes:', selectedNodeIds);
+        
         if (selectedNodeIds.length > 0) {
-            selectNodes(selectedNodeIds);
+            if (event.shiftKey) {
+                // Add to existing selection
+                selectedNodeIds.forEach(id => {
+                    if (!selectedNodes.includes(id)) {
+                        selectedNodes.push(id);
+                    }
+                });
+            } else {
+                // Replace selection
+                selectedNodes = selectedNodeIds;
+                node.classed('selected', false);
+            }
+            
+            // Apply visual selection
+            node.filter(d => selectedNodes.includes(d.id)).classed('selected', true);
+            
+            // Update link highlighting
+            link.classed('selected', false);
+            if (selectedNodes.length > 0) {
+                link.filter(d => {
+                    // Handle different link data structures
+                    let sourceId, targetId;
+                    
+                    if (typeof d.source === 'object' && d.source.id !== undefined) {
+                        sourceId = d.source.id;
+                    } else if (typeof d.source === 'number') {
+                        sourceId = d.source;
+                    } else {
+                        sourceId = d.source;
+                    }
+                    
+                    if (typeof d.target === 'object' && d.target.id !== undefined) {
+                        targetId = d.target.id;
+                    } else if (typeof d.target === 'number') {
+                        targetId = d.target;
+                    } else {
+                        targetId = d.target;
+                    }
+                    
+                    return selectedNodes.includes(sourceId) && selectedNodes.includes(targetId);
+                }).classed('selected', true);
+            }
+            
+            console.log('Box selection applied. Total selected:', selectedNodes.length);
         }
+        
+        updateNodeInfoForSelection();
         
         // Hide selection box and close button
         selectionBox.style('display', 'none');
@@ -635,40 +777,34 @@ function handleMouseUp(event) {
     }
 }
 
-function selectNodes(nodeIds) {
-    console.log('selectNodes called with:', nodeIds);
-    
-    // Clear previous selection
-    selectedNodes = [];
-    node.classed('selected', false);
+function updateLinkSelection() {
+    // Clear all link selections first
     link.classed('selected', false);
     
-    // Add new selection
-    selectedNodes = nodeIds;
-    
-    // Highlight selected nodes
-    const selectedNodeElements = node.filter(d => selectedNodes.includes(d.id));
-    selectedNodeElements.classed('selected', true);
-    console.log('Applied selected class to', selectedNodeElements.size(), 'nodes');
-    
-    // Highlight connected links
+    // Highlight links between selected nodes only
     const selectedLinkElements = link.filter(d => {
         const sourceId = typeof d.source === 'object' ? d.source.id : d.source;
         const targetId = typeof d.target === 'object' ? d.target.id : d.target;
-        return selectedNodes.includes(sourceId) || selectedNodes.includes(targetId);
+        return selectedNodes.includes(sourceId) && selectedNodes.includes(targetId);
     });
     selectedLinkElements.classed('selected', true);
-    console.log('Applied selected class to', selectedLinkElements.size(), 'links');
-    
-    // Update node info panel
-    updateNodeInfoForSelection();
+    console.log('Updated link selection:', selectedLinkElements.size(), 'links');
 }
 
 function updateNodeInfoForSelection() {
     console.log('Updating node info for selection:', selectedNodes);
     
     const infoDetails = document.getElementById('info-details');
-    const placeholderMessage = document.getElementById('placeholder-message');
+    const placeholderMessage = document.querySelector('.placeholder-message');
+    const selectionCountElement = document.getElementById('selection-count');
+    
+    // Update selection count indicator
+    if (selectedNodes.length > 1) {
+        selectionCountElement.textContent = `${selectedNodes.length} selected`;
+        selectionCountElement.style.display = 'block';
+    } else {
+        selectionCountElement.style.display = 'none';
+    }
     
     if (selectedNodes.length === 0) {
         // Show placeholder
@@ -891,11 +1027,40 @@ function updateTimelineVisibility() {
     });
     
     console.log('Timeline update complete - visible nodes:', visibleNodes, 'visible links:', visibleLinks);
+    
+    // Add timestamp tooltips to nodes
+    node.each(function(d) {
+        const minutes = Math.floor(d.timestamp / 60);
+        const seconds = d.timestamp % 60;
+        const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        d3.select(this).attr('title', `${d.name} (${timeString})`);
+    });
 }
 
 function updateCurrentTimeDisplay() {
     const timeDisplay = document.getElementById('current-time');
-    timeDisplay.textContent = `Time: ${currentTime}`;
+    if (timeDisplay && graphData.nodes.length > 0) {
+        // Convert timeline position to real time
+        const maxTime = Math.max(...graphData.nodes.map(n => n.timestamp));
+        const timeProgress = currentTime / maxTime;
+        
+        // Get the actual timestamp for current position
+        const sortedNodes = graphData.nodes.sort((a, b) => a.timestamp - b.timestamp);
+        const currentTimestamp = sortedNodes[Math.floor(timeProgress * sortedNodes.length)]?.timestamp || 0;
+        
+        // Convert to readable time format
+        const minutes = Math.floor(currentTimestamp / 60);
+        const seconds = currentTimestamp % 60;
+        const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        timeDisplay.textContent = timeString;
+        
+        // Update tooltip with more detailed info
+        const currentNode = sortedNodes.find(n => n.timestamp >= currentTimestamp);
+        if (currentNode) {
+            timeDisplay.title = `${currentNode.name} (${timeString})`;
+        }
+    }
 }
 
 function clearSelection() {
@@ -1297,22 +1462,61 @@ function recreateGraph() {
     
     // Reattach event handlers
 node.on('click', function(event, d) {
-    // If Shift is held, add to selection instead of replacing
+    event.stopPropagation(); // Prevent canvas click from deselecting
+    
+    console.log('Node clicked:', d.id, 'Shift key:', event.shiftKey);
+    
     if (event.shiftKey) {
-        if (selectedNodes.includes(d.id)) {
-            // Remove from selection
-            selectedNodes = selectedNodes.filter(id => id !== d.id);
-        } else {
+        // Multi-selection: toggle this node
+        const isSelected = d3.select(this).classed('selected');
+        d3.select(this).classed('selected', !isSelected);
+        
+        if (!isSelected) {
             // Add to selection
             selectedNodes.push(d.id);
+        } else {
+            // Remove from selection
+            selectedNodes = selectedNodes.filter(id => id !== d.id);
         }
-        selectNodes(selectedNodes);
     } else {
-        // Single node selection
+        // Single selection: clear all and select only this one
+        node.classed('selected', false);
         selectedNodes = [d.id];
-        selectNodes(selectedNodes);
+        d3.select(this).classed('selected', true);
     }
-    console.log('Selected node:', d);
+    
+    console.log('Selected nodes:', selectedNodes);
+    console.log('Selected nodes count:', selectedNodes.length);
+    
+    // Update link highlighting
+    link.classed('selected', false);
+    if (selectedNodes.length > 0) {
+        link.filter(d => {
+            // Handle different link data structures
+            let sourceId, targetId;
+            
+            if (typeof d.source === 'object' && d.source.id !== undefined) {
+                sourceId = d.source.id;
+            } else if (typeof d.source === 'number') {
+                sourceId = d.source;
+            } else {
+                sourceId = d.source;
+            }
+            
+            if (typeof d.target === 'object' && d.target.id !== undefined) {
+                targetId = d.target.id;
+            } else if (typeof d.target === 'number') {
+                targetId = d.target;
+            } else {
+                targetId = d.target;
+            }
+            
+            console.log('Link check:', { sourceId, targetId, selectedNodes });
+            return selectedNodes.includes(sourceId) && selectedNodes.includes(targetId);
+        }).classed('selected', true);
+    }
+    
+    updateNodeInfoForSelection();
 });
     
     // Update base parameters for new dataset
@@ -1485,6 +1689,57 @@ document.getElementById('toggle-analysts').addEventListener('change', (event) =>
 document.getElementById('toggle-products').addEventListener('change', (event) => {
     toggleNodeType(3, event.target.checked);
 });
+
+// Apply colors to toggle switches
+document.querySelector('#toggle-agents + .slider').classList.add('agents-color');
+document.querySelector('#toggle-analysts + .slider').classList.add('analysts-color');
+document.querySelector('#toggle-products + .slider').classList.add('products-color');
+
+// Multi-select mode variables (Commented Out)
+// let isMultiSelectMode = false;
+
+// Multi-select mode toggle handler (Commented Out)
+/*
+document.getElementById('toggle-multi-select').addEventListener('change', function() {
+    isMultiSelectMode = this.checked;
+    const statusElement = document.querySelector('.multi-select-status');
+    
+    if (isMultiSelectMode) {
+        statusElement.textContent = 'On';
+        statusElement.style.color = '#28a745';
+        console.log('Multi-select mode enabled');
+    } else {
+        statusElement.textContent = 'Off';
+        statusElement.style.color = 'var(--text-color)';
+        // Clear any existing multi-selection when turning off
+        if (selectedNodes.length > 1) {
+            selectedNodes = [];
+            node.classed('selected', false);
+            link.classed('selected', false);
+            updateNodeInfoForSelection();
+        }
+        console.log('Multi-select mode disabled');
+    }
+});
+*/
+
+// Start real-time clock
+function updateRealTimeClock() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString();
+    
+    // Update any real-time display elements
+    const realTimeElements = document.querySelectorAll('.real-time-clock');
+    realTimeElements.forEach(el => {
+        el.textContent = timeString;
+    });
+}
+
+// Update clock every second
+setInterval(updateRealTimeClock, 1000);
+updateRealTimeClock(); // Initial call
+
+
 
 // Timeline controls
 console.log('Setting up timeline event listeners...');
