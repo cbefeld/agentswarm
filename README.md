@@ -2,6 +2,10 @@
 
 A beautiful and interactive graph visualization built with D3.js that allows you to explore and manipulate network data.
 
+## 🌐 Live Demo
+
+**[View the live visualization here](https://cbefeld.github.io/agentswarm/)**
+
 ## Features
 
 - **Interactive Force-Directed Graph**: Nodes are positioned using D3's force simulation
